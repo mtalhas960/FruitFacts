@@ -1,187 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FruitFacts - Discover Amazing Fruit Facts</title>
+    <title>Apology Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-blue-200 flex flex-col items-center justify-center min-h-screen text-center">
+    <div id="container" class="bg-white p-8 rounded-lg shadow-lg max-w-lg">
+        <img id="image" src="/starting-img.png" alt="Apology Image" class="w-48 mx-auto">
+        <h1 id="message" class="text-xl font-bold my-4">Apology Letter</h1>
+        <button onclick="startApp()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Start</button>
+    </div>
 
-<body class="bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 text-gray-800 px-4 md:px-0">
-    <header class="text-center py-10">
-        <h1 class="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">🍓 FruitFacts 🍍</h1>
-        <p class="text-lg md:text-3xl text-white drop-shadow-lg mt-2">Discover amazing facts about your favorite fruits!</p>
-        <div class="mt-5 container mx-auto flex-col md:flex-row flex gap-4 justify-center">
-            <select id="filter-type" class="h-10 px-3 rounded bg-white text-gray-800 shadow">
-                <option value="all">All</option>
-                <option value="name">Name</option>
-                <option value="nutrition">Nutrition</option>
-                <option value="genus">Genus</option>
-                <option value="family">Family</option>
-            </select>
-
-            <!-- Filter Inputs -->
-            <div id="filter-inputs" class="flex-col md:flex-row flex gap-4">
-                <!-- Dynamic input fields will be inserted here -->
-            </div>
-
-            <!-- Fetch Button -->
-            <button id="fetch-button" class="h-10 px-3 bg-purple-600 text-white rounded shadow hover:bg-purple-700">
-                Fetch Data
-            </button>
-        </div>
-    </header>
-    <main class="container mx-auto py-6">
-        <div id="fruit-facts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Fruit facts will be dynamically inserted here -->
-        </div>
-    </main>
-    <footer>
-        <p>
-            If not working, please visit <a target="_blank" href="https://cors-anywhere.herokuapp.com/" class="text-blue-600 underline">this site</a> and request access to demo server
-        </p>
-    </footer>
     <script>
-        const container = document.getElementById("fruit-facts-container");
-        const fetchButton = document.getElementById("fetch-button");
-        const filterTypeSelect = document.getElementById("filter-type");
-        const filterInputs = document.getElementById("filter-inputs");
+        const messages = [
+            "I didn't mean to hurt you, I'm truly sorry. 😢",
+            "I regret my mistake, please forgive me. 🥺",
+            "I promise to be better. Can we be okay again? 🥺",
+            "You're very important to me. I hope you can forgive me. 🙇‍♂️"
+        ];
+        const questions = [
+            "Can I still be Doraemon? 🥺",
+            "Can you forgive this rabbit, please? 🐰",
+            "Will my piyari c behna forgive me? 🤗"
+        ];
+        let index = 0;
+        let zCount = 1;
+        let questionIndex = 0;
+        let responses = [];
 
-        const corsProxy = "https://cors-anywhere.herokuapp.com/";
-        const apiUrl = "https://www.fruityvice.com/api/fruit/";
-
-        // Function to dynamically show input fields based on filter type
-        function showFilterInputs(filterType) {
-            filterInputs.innerHTML = ""; // Clear previous inputs
-
-            if (filterType === "name") {
-                filterInputs.innerHTML = `
-                    <input id="fruit-name" type="text" placeholder="Fruit Name" class="p-2 rounded bg-white text-gray-800 shadow" />
-                `;
-            } else if (filterType === "nutrition") {
-                filterInputs.innerHTML = `
-                    <select id="nutrition-type" class="h-10 px-3 rounded bg-white text-gray-800 shadow">
-                        <option value="carbohydrates">Carbohydrates</option>
-                        <option value="protein">Protein</option>
-                        <option value="fat">Fat</option>
-                        <option value="calories">Calories</option>
-                        <option value="sugar">Sugar</option>
-                    </select>
-                    <input id="min-nutrition" type="number" placeholder="Min Nutrition (g)" class="h-10 px-3 rounded bg-white text-gray-800 shadow" />
-                    <input id="max-nutrition" type="number" placeholder="Max Nutrition (g)" class="h-10 px-3 rounded bg-white text-gray-800 shadow" />
-                `;
-            } else if (filterType === "genus") {
-                filterInputs.innerHTML = `
-                    <input id="fruit-genus" type="text" placeholder="Genus Name" class="p-2 rounded bg-white text-gray-800 shadow" />
-                `;
-            } else if (filterType === "family") {
-                filterInputs.innerHTML = `
-                    <input id="fruit-family" type="text" placeholder="Family Name" class="p-2 rounded bg-white text-gray-800 shadow" />
-                `;
-            }
+        function startApp() {
+            document.getElementById('container').innerHTML = `
+                <img id="image" src="/mid.gif" alt="Doraemon Sad" class="w-48 mx-auto">
+                <h1 id="message" class="text-xl font-bold my-4">I made a mistake. Will you forgive me? 🙏</h1>
+                <div id="buttons" class="mt-4 space-x-4">
+                    <button onclick="respond(true)" class="bg-green-500 text-white px-4 py-2 rounded-lg">Yes 😊</button>
+                    <button onclick="respond(false)" class="bg-red-500 text-white px-4 py-2 rounded-lg">No 😡</button>
+                </div>
+            `;
         }
 
-        // Function to fetch and display fruit facts
-        async function fetchFruitFacts(endpoint) {
-            container.innerHTML = "<p class='text-gray-500'>Loading...</p>";
-            try {
-                const response = await fetch(corsProxy + apiUrl + endpoint);
-                const data = await response.json();
-                console.log(data);
-
-                // If the response is an array, loop through it
-                if (Array.isArray(data)) {
-                    renderFruits(data);
-                } else {
-                    // Single object response (e.g., "fruit/banana")
-                    renderFruits([data]);
-                }
-            } catch (error) {
-                console.error("Error fetching fruit facts:", error);
-                container.innerHTML = "<p class='text-red-500'>Failed to load fruit data. Please try again later.</p>";
-            }
-        }
-
-        function renderFruits(fruits) {
-            container.innerHTML = ""; // Clear existing data
-            fruits.forEach(fruit => {
-                const fruitCard = document.createElement("div");
-                fruitCard.className = "bg-white shadow-lg rounded-lg p-4 hover:scale-105 transition transform duration-300";
-
-                fruitCard.innerHTML = `
-                    <h2 class="text-2xl font-bold text-purple-600">${fruit.name || "Unknown"}</h2>
-                    <p class="text-sm text-gray-600">Family: ${fruit.family || "N/A"}</p>
-                    <p class="text-sm text-gray-600">Genus: ${fruit.genus || "N/A"}</p>
-                    <p class="mt-2 text-gray-700"><strong>Nutrition:</strong></p>
-                    <ul class="text-sm text-gray-600">
-                        <li>Carbs: ${fruit.nutritions?.carbohydrates || 0}g</li>
-                        <li>Protein: ${fruit.nutritions?.protein || 0}g</li>
-                        <li>Fat: ${fruit.nutritions?.fat || 0}g</li>
-                        <li>Calories: ${fruit.nutritions?.calories || 0}kcal</li>
-                        <li>Sugar: ${fruit.nutritions?.sugar || 0}g</li>
-                    </ul>
+        function respond(accepted) {
+            responses.push({ question: document.getElementById('message').textContent, answer: accepted ? "Yes" : "No" });
+            
+            if (accepted) {
+                document.getElementById('container').innerHTML = `
+                    <img src="/finish-img.png" alt="Doraemon Happy" class="w-48 mx-auto">
+                    <h1 class="text-xl font-bold my-4">Thank you! You're amazing! 😃</h1>
+                    <p class="text-lg" id="step">You mean so much to me, and I'm so Eppy that you forgave me. 🌸</p>
+                    <button onclick="nextStep()" class="continueBtn bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">Continue 😊</button>
                 `;
-                container.appendChild(fruitCard);
-            });
-        }
-
-        // Build the endpoint URL based on user inputs
-        function buildEndpoint() {
-            const filterType = filterTypeSelect.value;
-            let endpoint = "";
-
-            if (filterType === "all") {
-                endpoint = "all";
-            } else if (filterType === "name") {
-                const name = document.getElementById("fruit-name").value;
-                if (name) {
-                    endpoint = `${name}`;
-                }
-            } else if (filterType === "nutrition") {
-                const nutritionType = document.getElementById("nutrition-type").value;
-                const minNutrition = document.getElementById("min-nutrition").value;
-                const maxNutrition = document.getElementById("max-nutrition").value;
-                if (nutritionType && minNutrition && maxNutrition) {
-                    endpoint = `${nutritionType}?min=${minNutrition}&max=${maxNutrition}`;
-                }
-            } else if (filterType === "genus") {
-                const genus = document.getElementById("fruit-genus").value;
-                if (genus) {
-                    endpoint = `genus/${genus}`;
-                }
-            } else if (filterType === "family") {
-                const family = document.getElementById("fruit-family").value;
-                if (family) {
-                    endpoint = `family/${family}`;
-                }
-            }
-
-            return endpoint;
-        }
-
-        // Fetch data when button is clicked
-        fetchButton.addEventListener("click", () => {
-            const endpoint = buildEndpoint();
-            if (endpoint) {
-                fetchFruitFacts(endpoint);
             } else {
-                container.innerHTML = "<p class='text-red-500'>Please fill in the required fields to fetch data.</p>";
+                if (index < messages.length) {
+                    document.getElementById('message').textContent = messages[index] + " " + questions[questionIndex];
+                    index++;
+                    questionIndex = (questionIndex + 1) % questions.length;
+                } else {
+                    let extraZ = 'z'.repeat(zCount);
+                    document.getElementById('message').textContent = `I won't give up! Pl${extraZ} forgive me! 😢 ` + questions[questionIndex];
+                    zCount++;
+                    questionIndex = (questionIndex + 1) % questions.length;
+                }
             }
-        });
+        }
 
-        // Show the filter inputs based on the selected filter type
-        filterTypeSelect.addEventListener("change", (e) => {
-            const selectedFilter = e.target.value;
-            showFilterInputs(selectedFilter);
-        });
+        function nextStep() {
+            const stepElement = document.getElementById('step');
+            
+            if (stepElement.textContent.includes("so Eppy that")) {
+                stepElement.innerHTML = `But first, can you please give a bigggg smile? 😊`;
+                document.querySelector('.continueBtn').style.display = 'none';
+                document.getElementById('container').innerHTML += `
+                    <div id="buttons" class="mt-4 space-x-4">
+                        <button onclick="smileResponse(true)" class="bg-green-500 text-white px-4 py-2 rounded-lg">Yes 😊</button>
+                        <button onclick="smileResponse(false)" class="bg-red-500 text-white px-4 py-2 rounded-lg">No 😡</button>
+                    </div>
+                `;
+            } else {
+                stepElement.textContent = "Yay! You smiled! That means everything to me! 😄";
+                document.querySelectorAll('buttons').forEach(button => button.style.display = 'none');
+            }
+        }
 
-        // Initialize with "All" filter
-        showFilterInputs("all");
-
-        // Fetch all fruits by default on page load
-        fetchFruitFacts("all");
+        function smileResponse(accepted) {
+            responses.push({ question: "Can you please give a bigggg smile? 😊", answer: accepted ? "Yes" : "No" });
+            
+            if (accepted) {
+                document.getElementById('step').textContent = "Yay! You smiled! That means everything to me! 😄";
+                document.getElementById('buttons').remove();
+            } else {
+                document.getElementById('step').textContent = "Aww, I'll try again! But first, can you please give a bigggg smile? 😊";
+            }
+        }
     </script>
 </body>
-
 </html>
