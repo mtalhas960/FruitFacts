@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apology Page</title>
+    <style>
+        #message{
+            word-break: break-all;
+        }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-200 flex flex-col items-center justify-center min-h-screen text-center">
-    <div id="container" class="bg-white p-8 rounded-lg shadow-lg max-w-lg">
+    <div id="container" class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-100">
         <img id="image" src="images/starting-img.png" alt="Apology Image" class="w-48 mx-auto">
         <h1 id="message" class="text-xl font-bold my-4">Apology Letter</h1>
         <button onclick="startApp()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Start</button>
@@ -33,7 +38,7 @@
         function startApp() {
             document.getElementById('container').innerHTML = `
                 <img id="image" src="images/mid.gif" alt="Doraemon Sad" class="w-48 mx-auto">
-                <h1 id="message" class="text-xl font-bold my-4">I made a mistake. Will you forgive me? 🙏</h1>
+                <h1 id="message" class="text-xl font-bold my-4">I made a mistake. Will you forgive me? 🥺</h1>
                 <div id="buttons" class="mt-4 space-x-4">
                     <button onclick="respond(true)" class="bg-green-500 text-white px-4 py-2 rounded-lg">Yes 😊</button>
                     <button onclick="respond(false)" class="bg-red-500 text-white px-4 py-2 rounded-lg">No 😡</button>
