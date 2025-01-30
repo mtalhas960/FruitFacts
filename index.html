@@ -8,7 +8,7 @@
 </head>
 <body class="bg-blue-200 flex flex-col items-center justify-center min-h-screen text-center">
     <div id="container" class="bg-white p-8 rounded-lg shadow-lg max-w-lg">
-        <img id="image" src="/starting-img.png" alt="Apology Image" class="w-48 mx-auto">
+        <img id="image" src="images/starting-img.png" alt="Apology Image" class="w-48 mx-auto">
         <h1 id="message" class="text-xl font-bold my-4">Apology Letter</h1>
         <button onclick="startApp()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Start</button>
     </div>
@@ -32,7 +32,7 @@
 
         function startApp() {
             document.getElementById('container').innerHTML = `
-                <img id="image" src="/mid.gif" alt="Doraemon Sad" class="w-48 mx-auto">
+                <img id="image" src="images/mid.gif" alt="Doraemon Sad" class="w-48 mx-auto">
                 <h1 id="message" class="text-xl font-bold my-4">I made a mistake. Will you forgive me? 🙏</h1>
                 <div id="buttons" class="mt-4 space-x-4">
                     <button onclick="respond(true)" class="bg-green-500 text-white px-4 py-2 rounded-lg">Yes 😊</button>
@@ -46,8 +46,8 @@
             
             if (accepted) {
                 document.getElementById('container').innerHTML = `
-                    <img src="/finish-img.png" alt="Doraemon Happy" class="w-48 mx-auto">
-                    <h1 class="text-xl font-bold my-4">Thank you! You're amazing! 😃</h1>
+                    <img src="images/finish-img.png" alt="Doraemon Happy" class="w-48 mx-auto">
+                    <h1 class="text-xl font-bold my-4">Thankooooo! You're amazing! 😃</h1>
                     <p class="text-lg" id="step">You mean so much to me, and I'm so Eppy that you forgave me. 🌸</p>
                     <button onclick="nextStep()" class="continueBtn bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">Continue 😊</button>
                 `;
